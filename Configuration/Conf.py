@@ -23,6 +23,6 @@ class Configuration:
     def initialize_log(cls):
         import logging
         logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] [%(funcName)s]- %(message)s',
-                            datefmt='%a, %d %b %Y %H:%M:%S')
+                            datefmt='%Y-%m-%d %H:%M:%S')
 
 Conf = Configuration()

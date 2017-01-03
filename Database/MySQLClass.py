@@ -49,7 +49,7 @@ class MySQLClass:
         self._cache = {}
 
     def initialize(self, settings, init):
-        con = "mysql://{user}:{password}@{host}:{port}/{schema}?charset=utf8".format(**settings)
+        con = "mysql+pymysql://{user}:{password}@{host}:{port}/{schema}?charset=utf8".format(**settings)
         self.engine = create_engine(con, echo=False)
 
         if init:
