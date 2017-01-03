@@ -18,7 +18,7 @@ if __name__=="__main__":
 
     dbflag = 'local'            # local,  remote
     conn = database_init(dbflag)
-#    cell_regionlist_spider(conn,regionlist)         # init,scrapy celllist and insert database; could run only 1st time
+    cell_regionlist_spider(conn,regionlist)         # init,scrapy celllist and insert database; could run only 1st time
     starttime = datetime.now()
     celllist = celllist_read_from_database(conn)    #  read celllist from database
     myfavor = [u'莲花池南里',u'太平桥东里',u'太平桥西里',u'太平桥小区',u'保利茉莉公馆',u'保利春天派']

@@ -5,7 +5,7 @@
 @date: 20160808
 """
 
-from urllib.request import urlopen,Request
+from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from bs4 import BeautifulSoup
