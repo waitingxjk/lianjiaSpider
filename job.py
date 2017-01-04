@@ -1,6 +1,7 @@
 from Crawler.Configuration.Conf import Conf
 from Crawler.Database import MySQL
 from Crawler.Crawl import craw
+from Crawler.Crawl import craw_estate_test, craw_estate_links_test
 
 
 def crawl(conf: str, init=False):
@@ -14,6 +15,7 @@ def crawl(conf: str, init=False):
 
     MySQL.initialize(Conf.mysql(), init)
 
+    # craw_estate_links_test()
     for job in Conf.jobs_fresh():
         craw(job)
 

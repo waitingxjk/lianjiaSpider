@@ -34,7 +34,7 @@ class Configuration:
     @classmethod
     def initialize_log(cls):
         import logging
-        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] [%(funcName)s: line %(lineno)]- %(message)s',
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] [%(funcName)s: line %(lineno)s]- %(message)s',
                             datefmt='%Y-%m-%d %H:%M:%S')
 
 Conf = Configuration()
