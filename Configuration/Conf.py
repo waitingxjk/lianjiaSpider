@@ -19,10 +19,22 @@ class Configuration:
         conf["password"] = self.conf["mysql"]["password"]
         return conf
 
+    def jobs_fresh(self):
+        jobs = []
+        for section in self.conf.sections():
+            if section.startswith("fresh_house"):
+                sec = self.conf[section]
+                email = sec.get("email")
+                jobs += [{
+                    "url": sec["url"],
+                    "email": email
+                }]
+        return jobs
+
     @classmethod
     def initialize_log(cls):
         import logging
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] [%(funcName)s]- %(message)s',
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] [%(funcName)s: line %(lineno)]- %(message)s',
                             datefmt='%Y-%m-%d %H:%M:%S')
 
 Conf = Configuration()

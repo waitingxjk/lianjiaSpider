@@ -3,7 +3,7 @@ from Crawler.Database import MySQL
 from Crawler.Crawl import craw
 
 
-def crawl(conf: str, url: str, init=False):
+def crawl(conf: str, init=False):
     """
     :param conf: Configuration file
     :param url: Url for the city
@@ -14,7 +14,8 @@ def crawl(conf: str, url: str, init=False):
 
     MySQL.initialize(Conf.mysql(), init)
 
-    craw(url)
+    for job in Conf.jobs_fresh():
+        craw(job)
 
 if __name__ == "__main__":
-    crawl("./config.conf", "http://cd.fang.lianjia.com")
+    crawl("../config.conf")
