@@ -62,45 +62,32 @@ def craw_estate_links(url: str):
     return estates
 
 
-def craw_estate(url: str):
+def craw_estate(url):
+    import json
     try:
         soup = page_soup(url)
-        title = soup.find("div", {"class": "resb-name"}).string
+        content = list(str(s.string) for s in soup.find_all("script") if str(s.string).find("bdLocalSearch") > -1)
+        if not content:
+            logging.info("Failed to find data for <%s>." % url)
+            return
+        data = content[0][content[0].find("{"):content[0].find(";")]
+        info = json.loads(data)
 
-        info = soup.find_all("ul", {"class": "x-box"})
-        # Basic information
-        basic = info[0].find_all("li")
-        estate_type = basic[0].find_all("span")[1].string
-        price = basic[1].find("span", {"class": "label-val"}).span.string
-        address = basic[4].find("span", {"class": "label-val"}).string
-        developer = basic[6].find("span", {"class": "label-val"}).string
+        # Information keys
+        # room_structure, open_stages, url
+        basics = ["id", "city_id", "district_name", "resblock_name", "developer_company"]
+        prop = ["property_company", "properright", "property_price"]
+        address = ["longitude", "latitude", "address"]
+        sales = ["average_price", "lowest_total_price", "price_confirm_time", "sale_status"]
+        building = ["build_type", "house_type", "decoration"]
+        stats = ["max_frame_area", "min_frame_area", "cubage_rate", "virescence_rate", "underground_car_num",
+                 "overground_car_num", "carRatio"]
+        time = ["open_date", "hand_over_time"]
 
-        # Building information
-        building = info[1].find_all("li")
-        b_type = building[0].find("span", {"class": "label-val"}).string
-        b_green = building[1].find("span", {"class": "label-val"}).string
-        b_volume = building[3].find("span", {"class": "label-val"}).string
-        b_wuye = building[5].find("span", {"class": "label-val"}).string
-        b_residents = building[6].find("span", {"class": "label-val"}).string
-        b_time_span = building[7].find("span", {"class": "label-val"}).string
+        keys = basics + prop + address + sales + building + stats + time
 
-        # Peripheral
-        peripheral = info[2].find_all("li")
-        p_wuye = peripheral[0].find("span", {"class": "label-val"}).string
-        p_chewei = peripheral[1].find("span", {"class": "label-val"}).string
-        p_wuyefei = peripheral[2].find("span", {"class": "label-val"}).string
-        neighborhood = []
-        for neighbor in peripheral[6].find("div", {"id": "around_txt"}).find_all("div"):
-            category = neighbor["data-value"]
-            if category == "其他":
-                continue
-            logging.debug(category)
-            neighbors = neighbor.span.find_all("span")
-            for item in neighbor.find_all("span", title=lambda x: x is not None):
-                neighborhood += [(category, item["title"], item.string)]
-
-        logging.info("%s, %s, %s, %s, %s" % (title, estate_type, price, address, developer))
-
+        desc = dict((k, info[k]) for k in keys)
+        logging.info(desc)
     except Exception as e:
         logging.error("For url <%s>, there's error: %s" % (url, e))
 
